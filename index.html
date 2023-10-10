@@ -1,0 +1,42 @@
+<script>
+
+async function fetchRepo() {
+  const response = await fetch('https://rustapi-nu.vercel.app/api');
+  const files = await response.json();
+  files.forEach(function(el){
+    createButton(el.name, el.name);
+})
+}
+
+function createButton(name, path) {
+  var button = document.createElement('button');
+  button.innerHTML = name;
+  button.onclick = function(){
+    copyJsonData(path);
+    return false;
+  };
+  document.body.appendChild(button);
+}
+async function copyJsonData(path){
+    let response = await fetch('https://rustapi-nu.vercel.app/api?path=' + path);
+    const jsonData = await response.json();
+    let copyData = atob(jsonData.content);
+    navigator.clipboard.writeText(copyData).then(
+        function(){
+        })
+      .catch(
+         function() {
+      });   
+}
+
+fetchRepo()
+
+</script>
+<style>
+  body{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+</style>
